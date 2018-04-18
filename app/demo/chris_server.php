@@ -14,13 +14,17 @@ class chris_server {
         $this->serv->set([
             'worker_num' => 8,
             'daemonize' => false,
+            'task_worker_num' => 2,
         ]);
 
         $this->serv->on('Start', [$this, 'onStart']);
         $this->serv->on('Connect', [$this, 'onConnect']);
         $this->serv->on('Receive', [$this, 'onReceive']);
         $this->serv->on('Close', [$this, 'onClose']);
+//        $this->serv->on('Task', [$this, 'onTask']);
+//        $this->serv->on('Finish', [$this, 'onFinish']);
 
+        $this->serv->start();
     }
 
 
@@ -45,7 +49,17 @@ class chris_server {
         echo "Client {$fd} close connection\n";
     }
 
+//    public function onTask()
+//    {
+//
+//    }
+//
+//    public function onFinish()
+//    {
+//
+//    }
+
 }
 
-$chris = new chris_server();
+new chris_server();
 
