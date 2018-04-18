@@ -14,8 +14,8 @@ class chris_server {
         $this->serv->set([
             'worker_num' => 8,
             'daemonize' => false,
-            'task_worker_num' => 2,
-        ]);
+//            'task_worker_num' => 2,
+        ]); 
 
         $this->serv->on('Start', [$this, 'onStart']);
         $this->serv->on('Connect', [$this, 'onConnect']);
