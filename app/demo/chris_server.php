@@ -15,7 +15,7 @@ class chris_server {
             'worker_num' => 8,
             'daemonize' => false,
 //            'task_worker_num' => 2,
-        ]); 
+        ]);
 
         $this->serv->on('Start', [$this, 'onStart']);
         $this->serv->on('Connect', [$this, 'onConnect']);
@@ -38,7 +38,7 @@ class chris_server {
         $serv->send($fd, "Hello {$fd}!");
     }
 
-    public function onReceive(swoole_server $serv, $fd, $from_id, $data)
+    public function onReceive(\swoole_server $serv, $fd, $from_id, $data)
     {
         echo "Get Message From Client {$fd}:{$data}\n";
         $serv->send($fd, $data);
