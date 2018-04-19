@@ -30,5 +30,5 @@ class chris_client2 {
     }
 }
 
-$client_chris = new chris_client();
+$client_chris = new chris_client2();
 $client_chris->connect();
