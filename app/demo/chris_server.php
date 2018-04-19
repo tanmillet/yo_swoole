@@ -14,15 +14,15 @@ class chris_server {
         $this->serv->set([
             'worker_num' => 8,
             'daemonize' => false,
-//            'task_worker_num' => 2,
+            'task_worker_num' => 2,
         ]);
 
         $this->serv->on('Start', [$this, 'onStart']);
         $this->serv->on('Connect', [$this, 'onConnect']);
         $this->serv->on('Receive', [$this, 'onReceive']);
         $this->serv->on('Close', [$this, 'onClose']);
-//        $this->serv->on('Task', [$this, 'onTask']);
-//        $this->serv->on('Finish', [$this, 'onFinish']);
+        $this->serv->on('Task', [$this, 'onTask']);
+        $this->serv->on('Finish', [$this, 'onFinish']);
 
         $this->serv->start();
     }
@@ -41,6 +41,8 @@ class chris_server {
     public function onReceive(\swoole_server $serv, $fd, $from_id, $data)
     {
         echo "Get Message From Client {$fd}:{$data}\n";
+
+        $serv->task($data , -1);
         $serv->send($fd, $data);
     }
 
@@ -49,15 +51,16 @@ class chris_server {
         echo "Client {$fd} close connection\n";
     }
 
-//    public function onTask()
-//    {
-//
-//    }
-//
-//    public function onFinish()
-//    {
-//
-//    }
+    public function onTest($serv, $task_id, $from_id, $data)
+    {
+        echo "Get Message From Client Task {$task_id}:{$data}\n";
+
+    }
+
+    public function onFinish($serv, $task_id, $data)
+    {
+        echo "Task end {$task_id}\n";
+    }
 
 }
 
