@@ -51,7 +51,7 @@ class chris_server {
         echo "Client {$fd} close connection\n";
     }
 
-    public function onTest($serv, $task_id, $from_id, $data)
+    public function onTask($serv, $task_id, $from_id, $data)
     {
         echo "Get Message From Client Task {$task_id}:{$data}\n";
 
