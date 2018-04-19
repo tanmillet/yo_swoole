@@ -4,21 +4,55 @@ namespace app\demo;
 
 
 class chris_swoole_listener {
+    private $serv;
+
     public function __construct()
     {
-        $serv = new  \swoole_server('127.0.0.1', 9502);
-        $port = $serv->listen("127.0.0.1", 9505, SWOOLE_TCP);
-        $this->serv->on('receive', function ($serv, $fd, $from_id, $data) {
-            echo "{$fd}:{$data}\n";
-            $serv->send($fd, $data);
-        });
+        $this->serv = new  \swoole_server('127.0.0.1', 9502);
+        $this->serv->set([
+            'worker_num' => 8,
+            'daemonize' => false,
+            'max_request' => 10000,
+            'dispatch_mode' => 2,
+            'debug_mode' => 1,
+        ]);
 
-        $serv->start();
+        $this->serv->on('Start', [$this, 'onStart']);
+        $this->serv->on('Connect', [$this, 'onConnect']);
+        $this->serv->on('Receive', [$this, 'onReceive']);
+        $this->serv->on('Close', [$this, 'onClose']);
 
-        $port->on('receive', function ($serv, $fd, $from_id, $data) {
+        $this->serv->addListener("127.0.0.1", 9505, SWOOLE_TCP);
+
+        $this->serv->start();
+    }
+
+
+    public function onStart($serv)
+    {
+        echo "Start\n";
+    }
+
+    public function onConnect($serv, $fd, $from_id)
+    {
+        echo "Client {$fd} connect\n";
+    }
+
+    public function onReceive(\swoole_server $serv, $fd, $from_id, $data)
+    {
+        $info = $serv->connection_info($fd, $from_id);
+        //来自9502的内网管理端口
+        if ($info['from_port'] == 9502) {
+            $serv->send($fd, "welcome admin\n");
+        } //来自外网
+        else {
             $serv->send($fd, 'Swoole: ' . $data);
-            $serv->close($fd);
-        });
+        }
+    }
+
+    public function onClose($serv, $fd, $from_id)
+    {
+        echo "Client {$fd} close connection\n";
     }
 }
 
