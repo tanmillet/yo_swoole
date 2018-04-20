@@ -3,7 +3,11 @@ $client = new swoole_client(SWOOLE_SOCK_TCP, SWOOLE_SOCK_ASYNC);
 
 $client->on("connect", function ($cli) {
     $cli->send("hello world\n");
+    fwrite(STDOUT, '请输入消息');
+    $msg = trim(fgets(STDIN));
+    $cli->send($msg);
 });
+
 
 $client->on("receive", function ($cli, $data) {
     echo "received: {$data}\n";
