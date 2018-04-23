@@ -12,11 +12,10 @@
     var wsServer = 'ws://127.0.0.1:9510';
     var websocket = new WebSocket(wsServer);
     websocket.onopen = function (evt) {
+        websocket.send('hello chris');
         console.log("Connected to WebSocket server.");
     };
-
     websocket.onclose = function (evt) {
-        websocket.send('hello chris');
         console.log("Disconnected");
     };
 
