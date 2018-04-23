@@ -55,6 +55,7 @@ class Http {
     {
         // $request->get();
         // $request->get('pram');
+        $response->cookie('chris', 'chris', time() + 1800);
         //发送Http响应体，并结束请求处理。
         $response->end("<h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>");
     }
