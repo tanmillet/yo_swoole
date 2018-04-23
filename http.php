@@ -36,10 +36,14 @@ class Http {
     public function __construct()
     {
         $this->http = new swoole_http_server(self::HOST, self::PORT);
+        //设置静态页面
         $this->http->set([
             'worker_num' => 4,
             'max_request' => 10000,
+            'enable_static_handler' => true,
+            'document_root' => '/ws/soft/app/yo/data'
         ]);
+
         $this->http->on('request', [$this, 'onRequest']);
 
         $this->http->start();
