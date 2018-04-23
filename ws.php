@@ -47,6 +47,11 @@ class WS {
      */
     public function onOpen($ws_server, $request)
     {
+        if ($request->fd == 1) {
+            swoole_timer_tick(2000, function ($time_id) {
+                echo "2 second timerid：" . $time_id . PHP_EOL;
+            });
+        }
         echo "server: handshake success with fd {$request->fd}", PHP_EOL;
     }
 
@@ -75,6 +80,10 @@ class WS {
             'fd' => $frame->fd
         ];
         $ws_server->task($data);
+
+        swoole_timer_after(5000 , function () use ($ws_server , $frame){
+            $ws_server->push($frame->fd, '5 second after timerid');
+        });
 
         $ws_server->push($frame->fd, 'this ws server data');
     }
