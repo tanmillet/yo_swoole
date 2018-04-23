@@ -1,29 +1,6 @@
 <?php
-
-/**
- * Class Swoole
- */
-class Swoole {
-    /**
-     * @var null
-     */
-    protected $server = null;
-
-    /**
-     *
-     */
-    const HOST = '0.0.0.0';
-
-    /**
-     * @var int|string
-     */
-    protected $port = '';
-
-    /**
-     * Swoole constructor.
-     */
-    public function __construct()
-    {
-        $this->port = 9501;
-    }
-}
+$http = new swoole_http_server("127.0.0.1", 8812);
+$http->on('request', function ($request, $response) {
+    $response->end("<h1>Hello Swoole. #".rand(1000, 9999)."</h1>");
+});
+$http->start();
