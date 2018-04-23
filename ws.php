@@ -22,7 +22,11 @@ class WS {
         ]);
 
         $this->ws->on('open', [$this, 'onOpen']);
-        $this->ws->on('message', [$this, 'onMessage']);
+//        $this->ws->on('message', [$this, 'onMessage']);
+        $this->ws->on('message', function (swoole_websocket_server $server, $frame) {
+            echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
+            $server->push($frame->fd, "this is server");
+        });
         $this->ws->on('close', [$this, 'onClose']);
 //        $this->ws->on('request', [$this, 'onRequest']);
 
