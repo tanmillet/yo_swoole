@@ -16,7 +16,7 @@ class Http {
     /**
      *监听 端口
      */
-    const PORT = '9502';
+    const PORT = 9502;
 
     /**
      * $host参数用来指定监听的ip地址，如127.0.0.1，或者外网地址，或者0.0.0.0监听全部地址
@@ -35,7 +35,7 @@ class Http {
      */
     public function __construct()
     {
-        $this->http = new swoole_http_server(self::HOST, self::PORT, SWOOLE_PROCESS);
+        $this->http = new swoole_http_server(self::HOST, self::PORT);
         $this->http->set([
             'worker_num' => 4,
             'max_request' => 10000,
