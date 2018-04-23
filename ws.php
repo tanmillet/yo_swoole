@@ -25,7 +25,7 @@ class WS {
         $this->ws->on('close', [$this, 'onClose']);
         $this->ws->on('request', [$this, 'onRequest']);
 
-        $this->server->start();
+        $this->ws->start();
     }
 
     /**
