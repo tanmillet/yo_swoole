@@ -17,13 +17,14 @@ class WS {
     {
         $this->ws = new swoole_websocket_server(self::HOST, self::PORT);
         $this->ws->set([
-            'worker_num' => 4,
+            'enable_static_handler' => true,
+            'document_root' => '/ws/soft/app/yo/data'
         ]);
 
         $this->ws->on('open', [$this, 'onOpen']);
         $this->ws->on('message', [$this, 'onMessage']);
         $this->ws->on('close', [$this, 'onClose']);
-        $this->ws->on('request', [$this, 'onRequest']);
+//        $this->ws->on('request', [$this, 'onRequest']);
 
         $this->ws->start();
     }
@@ -41,7 +42,7 @@ class WS {
      */
     public function onOpen($ws_server, $request)
     {
-        echo "server: handshake success with fd{$request->fd}", PHP_EOL;
+        echo "server: handshake success with fd {$request->fd}", PHP_EOL;
     }
 
     /**
