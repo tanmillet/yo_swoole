@@ -1,21 +1,29 @@
 <?php
 
+/**
+ * Class WS
+ * Chrome/Firefox/高版本IE/Safari等浏览器内置了JS语言的WebSocket客户端
+ * 微信小程序开发框架内置的WebSocket客户端
+ * 异步的PHP程序中可以使用Swoole\Http\Client作为WebSocket客户端
+ * apache/php-fpm或其他同步阻塞的PHP程序中可以使用swoole/framework提供的同步WebSocket客户端
+ * 非WebSocket客户端不能与WebSocket服务器通信
+ */
 class WS {
+    protected $ws = null;
     const HOST = '0.0.0.0';
-    const PORT = '9503';
+    const PORT = '9510';
 
     public function __construct()
     {
-        $this->server = new swoole_websocket_server(self::HOST, self::PORT);
-        $this->server->set([
+        $this->ws = new swoole_websocket_server(self::HOST, self::PORT);
+        $this->ws->set([
             'worker_num' => 4,
-
-//            'task_worker_num' => 2,
         ]);
 
-        $this->server->on('open', [$this, 'onOpen']);
-        $this->server->on('message', [$this, 'onMessage']);
-        $this->server->on('close', [$this, 'onClose']);
+        $this->ws->on('open', [$this, 'onOpen']);
+        $this->ws->on('message', [$this, 'onMessage']);
+        $this->ws->on('close', [$this, 'onClose']);
+        $this->ws->on('request', [$this, 'onRequest']);
 
         $this->server->start();
     }
@@ -72,6 +80,16 @@ class WS {
     public function onClose($ws_server, $fd)
     {
         echo "Client {$fd} closed" . PHP_EOL;
+    }
+
+    /**
+     * @param $request
+     * @param $response
+     * WebSocket服务器除了提供WebSocket功能之外，实际上也可以处理Http长连接。只需要增加onRequest事件监听即可实现Comet方案Http长轮询。
+     */
+    public function onRequest($request, $response)
+    {
+
     }
 
     /**
