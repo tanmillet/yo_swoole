@@ -40,15 +40,16 @@ class Http {
             'worker_num' => 4,
             'max_request' => 10000,
         ]);
-
         $this->http->on('request', [$this, 'onRequest']);
 
         $this->http->start();
     }
 
     /**
-     * @param $request Http请求对象，保存了Http客户端请求的相关信息，包括GET、POST、COOKIE、Header等。
-     * @param $response Http响应对象，通过调用此对象的方法，实现Http响应发送。
+     * @param $request
+     * Http请求对象，保存了Http客户端请求的相关信息，包括GET、POST、COOKIE、Header等。
+     * @param $response
+     * Http响应对象，通过调用此对象的方法，实现Http响应发送。
      */
     public function onRequest($request, $response)
     {
@@ -74,3 +75,5 @@ class Http {
         return $this->http;
     }
 }
+
+$http = new Http();
