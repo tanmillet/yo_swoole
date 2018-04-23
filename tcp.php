@@ -26,7 +26,7 @@ class TCP {
      */
     public function onConnect($tcp, $fd, $reactor_id)
     {
-        echo "Client: Connect." . PHP_EOL;
+        echo "Client: {$fd} Connect." . PHP_EOL;
     }
 
     /**

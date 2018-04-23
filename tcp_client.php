@@ -1,18 +1,29 @@
 <?php
 
 class Tcp_Client {
-
     protected $tcp_client = null;
     const HOST = '127.0.0.1';
     const PORT = 9501;
 
+    /**
+     * Tcp_Client constructor.
+     * $sock_type表示socket的类型，如TCP/UDP
+     * 使用$sock_type | SWOOLE_SSL可以启用SSL加密
+     * $is_sync表示同步阻塞还是异步非阻塞，默认为同步阻塞
+     * $key用于长连接的Key，默认使用IP:PORT作为key。相同key的连接会被复用
+     * swoole_client->__construct(int $sock_type, int $is_sync = SWOOLE_SOCK_SYNC, string $key);
+     */
     public function __construct()
     {
-        $this->tcp_client = new swoole_client(self::HOST, self::PORT);
-
+        $this->tcp_client = new swoole_client(SWOOLE_SOCK_TCP);
         $this->connect(self::HOST, self::PORT);
-        $this->send('client send data : this is test client');
+
+        fwrite(STDOUT, "输入消息:");
+        $msg = trim(fgets(STDIN));
+
+        $this->send($msg);
         $tcp_server_data = $this->receive();
+        echo $tcp_server_data . PHP_EOL;
 
         $this->close();
     }
