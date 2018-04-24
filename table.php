@@ -34,3 +34,5 @@ class Table {
     }
 
 }
+
+$table = new Table();
