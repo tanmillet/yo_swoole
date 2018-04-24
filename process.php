@@ -25,3 +25,26 @@ echo $pid . PHP_EOL;
 //回收结束运行的子进程。
 swoole_process::wait();
 
+//[root@bogon chris3]# ps aux | grep process.php
+//root       4044  0.4  0.4 155096  9148 pts/0    S+   00:49   0:00 php process.php
+//root       4058  0.0  0.0 112660   984 pts/1    S+   00:49   0:00 grep --color=auto process.php
+//[root@bogon chris3]# pstress -p 4044
+//bash: pstress: command not found...
+//[root@bogon chris3]# pstree -p 4044
+//php(4044)───php(4045)─┬─php(4046)─┬─php(4051)
+//                      │           ├─php(4052)
+//                      │           ├─php(4053)
+//                      │           └─php(4054)
+//                      ├─{php}(4047)
+//                      ├─{php}(4048)
+//                      ├─{php}(4049)
+//                      └─{php}(4050)
+//[root@bogon chris3]# ps aft | grep http.php
+//  4131 pts/1    S+     0:00          \_ grep --color=auto http.php
+//  4045 pts/0    Sl+    0:00              \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+//  4046 pts/0    S+     0:00                  \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+//  4051 pts/0    S+     0:00                      \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+//  4052 pts/0    S+     0:00                      \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+//  4053 pts/0    S+     0:00                      \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+//  4054 pts/0    S+     0:00                      \_ /usr/local/bin/php /ws/soft/app/yo/http.php
+
