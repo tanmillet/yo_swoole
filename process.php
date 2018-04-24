@@ -19,8 +19,9 @@
 $process = new swoole_process(function (swoole_process $process) {
     $process->exec("/usr/local/bin/php" , [__DIR__ . '/http.php']);
 }, false);
-$pid = $proces->start();
+$pid = $process->start();
 echo $pid . PHP_EOL;
 
+//回收结束运行的子进程。
 swoole_process::wait();
 
